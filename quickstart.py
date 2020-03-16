@@ -44,8 +44,8 @@ class GmailApi():
         return labels
 
     def get_emails(self, labelId):
-        # q_string = "after:2019/2/5 before:2019/2/6"
-        result = self.service.users().messages().list(userId='me',labelIds=[labelId]).execute()
+        q_string = "to:(pruebadocs@backstartup.com)"
+        result = self.service.users().messages().list(userId='me',labelIds=[labelId],q=q_string).execute()
         emails = result.get('messages', [])
         return emails
 
@@ -65,43 +65,49 @@ class GmailApi():
 def main():
     test = GmailApi()
     pp = pprint.PrettyPrinter(indent=4)
-    # labels = test.get_labels()
-    # print("Labels:", labels)
+    labels = test.get_labels()
+    print("Labels:", labels)
 
-    emails = test.get_emails("UNREAD")
-    print("Emails:", emails)
+    # emails = test.get_emails("UNREAD")
+    # print("Emails:", emails)
 
-    email = test.get_email_item("168be1c4da46a7aa")
-    # print("Email Body:", email)
-    pp.pprint(email)
+    # email = test.get_email_item("168c0db33f4f7682")
+    # # print("Email Body:", email)
+    # pp.pprint(email)
+
+    # for item in email['payload']['headers']:
+    #     if item['name'] == 'From':
+    #         email_from = item['value']
+    #         email_from = email_from.split("<")
+    #         print("Email From:", email_from[1].replace('>',''))
 
     # modify_email = test.set_email_read("168be1c4da46a7aa")
     # pp.pprint(modify_email)
 
-    attachment = test.get_email_attachments("168be1c4da46a7aa","ANGjdJ_aqwIwAyjS8GQCEidAy-ct4cZ6cpDtq5pu3GqadISk3tBh7axgIEePX1C993lexp1DYY1-XUKqoZbkYD4a1OaP0wV1g4KnPcZNF_-DBaKyylWoVAygZ5iy594AHJ6xb4GCXM45GpsIEWSh0YCfywSJncuSelQGSu4dg4q5tvp-h4hahq6HBE2Gg5L237sxOpP9pvog8VQUat-VRs1I-Ua2LVOztmNDKqtFWQ")
+    # attachment = test.get_email_attachments("168be1c4da46a7aa","ANGjdJ_aqwIwAyjS8GQCEidAy-ct4cZ6cpDtq5pu3GqadISk3tBh7axgIEePX1C993lexp1DYY1-XUKqoZbkYD4a1OaP0wV1g4KnPcZNF_-DBaKyylWoVAygZ5iy594AHJ6xb4GCXM45GpsIEWSh0YCfywSJncuSelQGSu4dg4q5tvp-h4hahq6HBE2Gg5L237sxOpP9pvog8VQUat-VRs1I-Ua2LVOztmNDKqtFWQ")
     # pp.pprint(attachment)
 
     
-    for part in email['payload']['parts']:
-        if part['filename']:
+    # for part in email['payload']['parts']:
+    #     if part['filename']:
 
-            attachment = test.get_email_attachments("168be1c4da46a7aa",part['body']['attachmentId'])
+    #         attachment = test.get_email_attachments("168be1c4da46a7aa",part['body']['attachmentId'])
            
 
-            path = 'download/'
+    #         path = 'download/'
 
-            try:
-                os.makedirs(path)
-            except OSError:
-                if not os.path.isdir(path):
-                    raise
+    #         try:
+    #             os.makedirs(path)
+    #         except OSError:
+    #             if not os.path.isdir(path):
+    #                 raise
 
-            fileNamePath = os.path.join(path, part['filename'])
-            my_file = open(fileNamePath, 'w+b')
+    #         fileNamePath = os.path.join(path, part['filename'])
+    #         my_file = open(fileNamePath, 'w+b')
             
 
-            my_file.write(base64.urlsafe_b64decode(attachment['data']))
-            my_file.close()
+    #         my_file.write(base64.urlsafe_b64decode(attachment['data']))
+    #         my_file.close()
 
     
 
